@@ -75,7 +75,7 @@ window.addEventListener('deviceorientation', handleOrientation);
 
 
 
-var socket = new eio.Socket('ws://localhost:8000');
+var socket = new eio.Socket('ws://10.0.30.144:8001');
 socket.on('open', function() {
     socket.send('ok, its nice!');
     socket.on('message', function(data) {});

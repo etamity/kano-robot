@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
-class RobotEmitter extends EventEmitter {}
-const emitter = new RobotEmitter();
+//class RobotEmitter extends EventEmitter {}
+const emitter = new EventEmitter(); // new RobotEmitter();
 
 emitter.on('MOVE', function(data) {
 	var direction = data.direction,
