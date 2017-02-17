@@ -1,0 +1,9 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/engine.io-client/2.0.2/engine.io.min.js"></script>
+<script>
+  var socket = new eio.Socket('ws://localhost:8000');
+  socket.on('open', function(){
+  	socket.send('ok, its nice!');
+    socket.on('message', function(data){});
+    socket.on('close', function(){});
+  });
+</script>
