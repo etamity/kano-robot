@@ -35,7 +35,7 @@
     </body>
 
 </html>>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/engine.io-client/2.0.2/engine.io.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
 <script>
 var ball = document.querySelector('.ball');
 var garden = document.querySelector('.garden');
@@ -43,6 +43,8 @@ var output = document.querySelector('.output');
 
 var maxX = garden.clientWidth - ball.clientWidth;
 var maxY = garden.clientHeight - ball.clientHeight;
+
+var socketReady = false;
 
 function handleOrientation(event) {
     var x = event.beta; // In degree in the range [-180,180]
@@ -69,16 +71,35 @@ function handleOrientation(event) {
     // It center the positioning point to the center of the ball
     ball.style.top = (maxX * x / 180 - 50) + "px";
     ball.style.left = (maxY * y / 180 - 50) + "px";
+     console.log(x, y);
+    if (socketReady) {
+        setInterval(function(){
+            console.log('sending data', x, y);
+            onXYmessages(x, y, socket);
+        }, 500);
+
+    }
+
 }
 
 window.addEventListener('deviceorientation', handleOrientation);
 
 
-
-var socket = new eio.Socket('ws://10.0.30.144:8001');
-socket.on('open', function() {
-    socket.send('ok, its nice!');
-    socket.on('message', function(data) {});
-    socket.on('close', function() {});
+var socket = io.connect('http://localhost:8001');
+socket.on('READY', function (data) {
+    socketReady = true;
+    console.log('READY', socketReady);
 });
+
+
+var onXYmessages = function(x, y, socket) {
+    direction = Math.atan2(y, x) / Math.PI * 180;
+    var params = {
+            direction: direction,
+            speed: 300,
+            x: x,
+            y: y
+        }
+    socket.emit('MOVE', params);
+}
 </script>

@@ -1,21 +1,25 @@
 
 const port = 8001;
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
-var engine = require('engine.io');
-var emitter = require('./events');
-var server = engine.listen(port);
-
-
+server.listen(port);
 console.log('Socket Started, listening port', port, '...');
-
-server.on('connection', function(socket){
-	console.log('Client Connected');
-  	socket.send('utf 8 string');
-  	socket.on('message', function(data){
-  		var event = data.event,
-    	 	params = data.params;
-  		emitter.emit(event, params);
-  	})
-
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
 });
 
+io.on('connection', function (socket) {
+  	socket.emit('READY');
+	socket.on('MOVE', function(data) {
+		var direction = data.direction,
+			speed = data.speed,
+			x = data.x,
+			y = data.y;
+
+		console.log(JSON.stringify(data), direction, speed, x, y);
+		// send message to robot here
+
+	})
+});

@@ -4,9 +4,11 @@ const emitter = new EventEmitter(); // new RobotEmitter();
 
 emitter.on('MOVE', function(data) {
 	var direction = data.direction,
-		duration = data.duration,
-		speed = data.speed;
+		speed = data.speed,
+		x = data.x,
+		y = data.y;
 
+	console.log(direction, speed, x, y);
 	// send message to robot here
 
 })
