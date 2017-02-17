@@ -75,8 +75,8 @@ function handleOrientation(event) {
     ball.style.top = (maxX * x / 180 - 50) + "px";
     ball.style.left = (maxY * y / 180 - 50) + "px";
 
-    globalX = x;
-    globalY = y
+    globalX = event.beta;
+    globalY = event.gamma;
 
 }
 
@@ -88,8 +88,8 @@ socket.on('READY', function (data) {
     socketReady = true;
     console.log('READY', socketReady);
     setInterval(function(){
-        console.log('sending data', x, y);
-        onXYmessages(globalX, globalX, socket);
+        console.log('sending data', globalX, globalY);
+        onXYmessages(globalX, globalY, socket);
     }, 500);
 });
 
